@@ -32,13 +32,21 @@ public class Sentence {
 				++count;
 		return count;
 	}
-	
+
 	public int countWordsEndsWith(final String suffix) {
 		int count = 0;
 		for (String word : words)
 			if (word.endsWith(suffix))
 				++count;
 		return count;
+	}
+
+	public int countPatterns(final List<String> patterns) {
+		return StringUtils.countPatterns(sentence, patterns);
+	}
+
+	public int countPattern(String pattern) {
+		return StringUtils.countPattern(sentence, pattern);
 	}
 
 	public String toString() {

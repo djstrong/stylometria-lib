@@ -49,19 +49,11 @@ public class Text {
 	}
 
 	public int countPatterns(final List<String> patterns) {
-		int count = 0;
-		for (String pattern : patterns)
-			count += countPattern(pattern);
-		return count;
+		return StringUtils.countPatterns(text, patterns);
 	}
 
 	public int countPattern(String pattern) {
-		Pattern p = Pattern.compile(pattern);
-		Matcher m = p.matcher(text);
-		int count = 0;
-		while (m.find())
-			++count;
-		return count;
+		return StringUtils.countPattern(text, pattern);
 	}
 
 	public String toString() {
