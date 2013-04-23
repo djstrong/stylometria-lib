@@ -1,24 +1,22 @@
 package agh.stylometria;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.text.BreakIterator;
+import java.util.Map;
 
 public class FeaturesExtractor {
 
-	public static double[] features(String text) {
-		double[] features = new double[1];
+	public static Map<String,Double> features(String text) {
+		Map features = new HashMap<String,Double>();
 
 		Text t = new Text(text);
 
 		// TODO: wielkie i male litery, co z polskimi znakami
 
 		// płeć - końcówki łam, łem
-		int countLem = t.countWordsEndsWith("łem");
-		int countLam = t.countWordsEndsWith("łam");
+		features.put("countLem",t.countWordsEndsWith("łem"));
+		features.put("countLam",t.countWordsEndsWith("łam"));
 
 		// wulgaryzmy
 		// http://slowniki.zoni.pl/?s=wulgaryzmy_list
@@ -316,11 +314,11 @@ public class FeaturesExtractor {
 				"zapierdoliłabym", "zapierdoliłabyś", "zapierdoliłbym",
 				"zapierdoliłbyś", "zapierdoliłoby", "zapierdoliłyby" };
 
-		int countWulgaryzmy = t.countWords(new HashSet<String>(Arrays
-				.asList(wulgaryzmy)));
+		features.put("countWulgaryzmy",t.countWords(new HashSet<String>(Arrays
+				.asList(wulgaryzmy))));
 
 		// znaki diakrytyczne
-		int countZnakiDiakrytyczne = t.countPattern("[ąśżźćęńłóĄŚŻŹĆĘŃŁÓ]");
+		features.put("countZnakiDiakrytyczne",t.countPattern("[ąśżźćęńłóĄŚŻŹĆĘŃŁÓ]"));
 
 		// pisanie wielką literą form grzecznościowych
 		String[] zwrotyGrzecznosciowe = new String[] { "ty", "ci", "ciebie",
@@ -334,20 +332,21 @@ public class FeaturesExtractor {
 				"panowie", "pany", "pani", "pań", "panie", "panią", "paniach",
 				"paniami", "paniom", "państwo", "państw", "państwa",
 				"państwem", "państwu", "państwach", "państwami", "państwom" };
-		int countZwrotyGrzecznoscioweMala = t.countWords(new HashSet<String>(
-				Arrays.asList(zwrotyGrzecznosciowe)));
+		features.put("countZwrotyGrzecznoscioweMala",t.countWords(new HashSet<String>(
+				Arrays.asList(zwrotyGrzecznosciowe))));
 		// TODO: wielka
 
 		// emotikony
 		// TODO: kazda osobno ?
+		features.put("emoticons",t.countPattern("(:|;|x|X){1}-?(\\)|\\(|D|P|d|p)"));
 
 		// ilość słów / zdanie
-		int countWords = t.countWords();
-		int countSentences = t.countSentences();
+		features.put("countWords",t.countWords());
+		features.put("countSentences",t.countSentences());
 
 		// ilość znaków interpunkcyjnych / zdanie
 		// TODO: kazdy osobno ?
-		int countZnakiInterpunkcyjne = t.countPattern("[,.()?!:;\"'-]");
+		features.put("countZnakiInterpunkcyjne",t.countPattern("[,.()?!:;\"'-]"));
 
 		// ilość liter w słowach (częstość występowania słów o określonej
 		// długości)
@@ -363,6 +362,9 @@ public class FeaturesExtractor {
 	}
 
 	public static void main(String[] args) {
-
+		Map<String,Double> f = features("kiedy xP x-D :-D :( :(((( ;)kierowca samochodu stracił panowanie? :) I Ci ludzie ciągle piją do wszystkich, że nie chcą ich przepuszczać na skrzyżowaniach, że kierowcy samochodów nie chcą wjeżdżać na chodniki, aby przepuścić przepychającego się w korku motocykla? CO ZA HIPOKRYZJA!");
+		for(String k : f.keySet()){
+			System.out.println(k+" -> "+f.get(k));
+		}
 	}
 }
