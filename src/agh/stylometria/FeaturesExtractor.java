@@ -7,16 +7,20 @@ import java.util.Map;
 
 public class FeaturesExtractor {
 
-	public static Map<String,Double> features(String text) {
-		Map features = new HashMap<String,Double>();
+	public static Map<String, Double> features(String text) {
+		Map<String, Double> features = new HashMap<String, Double>();
 
 		Text t = new Text(text);
 
 		// TODO: wielkie i male litery, co z polskimi znakami
 
 		// płeć - końcówki łam, łem
-		features.put("countLem",t.countWordsEndsWith("łem"));
-		features.put("countLam",t.countWordsEndsWith("łam"));
+		features.put("countL'em",
+				(double) t.countWordsEndsWithIgnoreCase("łem"));
+		features.put("countL'am",
+				(double) t.countWordsEndsWithIgnoreCase("łam"));
+		features.put("countLem", (double) t.countWordsEndsWithIgnoreCase("lem"));
+		features.put("countLam", (double) t.countWordsEndsWithIgnoreCase("lam"));
 
 		// wulgaryzmy
 		// http://slowniki.zoni.pl/?s=wulgaryzmy_list
@@ -313,12 +317,16 @@ public class FeaturesExtractor {
 				"zapierdoliłby", "zapierdolonoby", "zapierdoliłaby",
 				"zapierdoliłabym", "zapierdoliłabyś", "zapierdoliłbym",
 				"zapierdoliłbyś", "zapierdoliłoby", "zapierdoliłyby" };
-
-		features.put("countWulgaryzmy",t.countWords(new HashSet<String>(Arrays
-				.asList(wulgaryzmy))));
+		HashSet<String> wulg = new HashSet<String>(wulgaryzmy.length);
+		for (String wulgaryzm : wulgaryzmy) {
+			wulg.add(StringUtils.removeDiacritics(wulgaryzm));
+		}
+		features.put("countWulgaryzmy",
+				(double) t.countWordsLowerWoDiacritics(wulg));
 
 		// znaki diakrytyczne
-		features.put("countZnakiDiakrytyczne",t.countPattern("[ąśżźćęńłóĄŚŻŹĆĘŃŁÓ]"));
+		features.put("countZnakiDiakrytyczne",
+				(double) t.countPattern("[ąśżźćęńłóĄŚŻŹĆĘŃŁÓ]"));
 
 		// pisanie wielką literą form grzecznościowych
 		String[] zwrotyGrzecznosciowe = new String[] { "ty", "ci", "ciebie",
@@ -332,39 +340,81 @@ public class FeaturesExtractor {
 				"panowie", "pany", "pani", "pań", "panie", "panią", "paniach",
 				"paniami", "paniom", "państwo", "państw", "państwa",
 				"państwem", "państwu", "państwach", "państwami", "państwom" };
-		features.put("countZwrotyGrzecznoscioweMala",t.countWords(new HashSet<String>(
-				Arrays.asList(zwrotyGrzecznosciowe))));
-		// TODO: wielka
+		features.put("countZwrotyGrzecznoscioweMala", (double) t
+				.countWordsWoDiacritics(new HashSet<String>(Arrays
+						.asList(zwrotyGrzecznosciowe))));
+
+		HashSet<String> zw = new HashSet<String>(zwrotyGrzecznosciowe.length);
+		for (String zwrot : zwrotyGrzecznosciowe)
+			zw.add(StringUtils.capitalize(zwrot));
+		features.put("countZwrotyGrzecznoscioweWielka",
+				(double) t.countWordsWoDiacritics(zw));
 
 		// emotikony
 		// TODO: kazda osobno ?
-		features.put("emoticons",t.countPattern("(:|;|x|X){1}-?(\\)|\\(|D|P|d|p)"));
+		features.put("emoticons",
+				(double) t.countPattern("(:|;|x|X){1}-?(\\)|\\(|D|P|d|p)"));
 
 		// ilość słów / zdanie
-		features.put("countWords",t.countWords());
-		features.put("countSentences",t.countSentences());
+		features.put("countWords", (double) t.countWords());
+		features.put("countSentences", (double) t.countSentences());
 
 		// ilość znaków interpunkcyjnych / zdanie
 		// TODO: kazdy osobno ?
-		features.put("countZnakiInterpunkcyjne",t.countPattern("[,.()?!:;\"'-]"));
+		features.put("countZnakiInterpunkcyjne",
+				(double) t.countPattern("[,.()?!:;\"'-]"));
 
 		// ilość liter w słowach (częstość występowania słów o określonej
 		// długości)
-
+		int max = 20;
+		int[] slowa = new int[max];
+		for (int i = 0; i < max; ++i) {
+			slowa[i] = 0;
+		}
+		for (Sentence s : t.sentences) {
+			for (String w : s.words) {
+				if (w.length() < max)
+					slowa[w.length()]++;
+			}
+		}
+		for (int i = 0; i < max; ++i) {
+			features.put("countDlugosc" + i, (double) slowa[i]);
+		}
+		
 		// ilość poszczególnych znaków (raczej specjalnych)
 
-		// pokemony
+		// pokemony - pomijajac pierwsza litere czy slowo ma male i wielkie
+		// litery
+		int count = 0;
+		for (Sentence s : t.sentences) {
+			for (String w : s.words) {
+				boolean mala = false;
+				boolean wielka = false;
+				for (int i = 1; i < w.length() - 1; ++i) {
+					String letter = w.substring(i, i + 1);
+					if (letter == letter.toLowerCase())
+						mala = true;
+					else
+						wielka = true;
+				}
+				if (mala && wielka)
+					++count;
+			}
+		}
+		features.put("countPokemony", (double) count);
 
 		// common words, functional words - np. jest, na, w, dla - najlepsze
 		// wyniki
+		
+		//truche duzo spojnikow i przyimkow
 
 		return features;
 	}
 
 	public static void main(String[] args) {
-		Map<String,Double> f = features("kiedy xP x-D :-D :( :(((( ;)kierowca samochodu stracił panowanie? :) I Ci ludzie ciągle piją do wszystkich, że nie chcą ich przepuszczać na skrzyżowaniach, że kierowcy samochodów nie chcą wjeżdżać na chodniki, aby przepuścić przepychającego się w korku motocykla? CO ZA HIPOKRYZJA!");
-		for(String k : f.keySet()){
-			System.out.println(k+" -> "+f.get(k));
+		Map<String, Double> f = features("kiedy xP x-D :-D :( :(((( ;)kierowca samochodu stracił panowanie? :) I Ci ludzie ciągle piją do wszystkich, że nie chcą ich przepuszczać na skrzyżowaniach, że kierowcy samochodów nie chcą wjeżdżać na chodniki, aby przepuścić przepychającego się w korku motocykla? CO ZA HIPOKRYZJA!");
+		for (String k : f.keySet()) {
+			System.out.println(k + " -> " + f.get(k));
 		}
 	}
 }

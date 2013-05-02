@@ -41,10 +41,39 @@ public class Text {
 		return count;
 	}
 
+	public int countWordsEndsWithIgnoreCase(final String suffix) {
+		int count = 0;
+		for (Sentence s : sentences)
+			count += s.countWordsEndsWithIgnoreCase(suffix);
+		return count;
+	}
+
 	public int countWords(final Set<String> bag) {
 		int count = 0;
 		for (Sentence s : sentences)
 			count += s.countWords(bag);
+		return count;
+	}
+
+	public int countWordsLower(final Set<String> bag) {
+		int count = 0;
+		for (Sentence s : sentences)
+			count += s.countWordsLower(bag);
+		return count;
+	}
+
+	public int countWordsLowerWoDiacritics(final Set<String> bag) {
+		int count = 0;
+		for (Sentence s : sentences)
+			count += s.countWordsLowerWoDiacritics(bag);
+		return count;
+	}
+
+	public int countWordsWoDiacritics(final Set<String> bag) {
+		int count = 0;
+		for (Sentence s : sentences) {
+			count += s.countWordsWoDiacritics(bag);
+		}
 		return count;
 	}
 
