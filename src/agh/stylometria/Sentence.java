@@ -11,6 +11,7 @@ public class Sentence {
 	public final List<String> wordsLower = new ArrayList<String>();
 	public final List<String> wordsLowerWoDiacritics = new ArrayList<String>();
 	public final List<String> wordsWoDiacritics = new ArrayList<String>();
+	public final List<String> onlyWords = new ArrayList<String>();
 
 	public Sentence(final String sentence) {
 		this.sentence = sentence;
@@ -26,11 +27,14 @@ public class Sentence {
 			wordsLowerWoDiacritics.add(StringUtils.removeDiacritics(word
 					.toLowerCase()));
 			wordsWoDiacritics.add(StringUtils.removeDiacritics(word));
+
+			if (StringUtils.countPattern(word, "[a-zA-Z]") > 0)
+				onlyWords.add(word);
 		}
 	}
 
 	public int countWords() {
-		return words.size(); // TODO: tylko slowa
+		return onlyWords.size();
 	}
 
 	public int countWords(final Set<String> bag) {
@@ -53,6 +57,14 @@ public class Sentence {
 		int count = 0;
 		for (String word : wordsLowerWoDiacritics)
 			if (bag.contains(word))
+				++count;
+		return count;
+	}
+
+	public int countWordsLowerWoDiacritics(final String otherWord) {
+		int count = 0;
+		for (String word : wordsLowerWoDiacritics)
+			if (otherWord.equals(word))
 				++count;
 		return count;
 	}

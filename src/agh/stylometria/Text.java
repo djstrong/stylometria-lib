@@ -32,6 +32,13 @@ public class Text {
 		return count;
 	}
 
+	public int countWordsLowerWoDiacritics(final String otherWord) {
+		int count = 0;
+		for (Sentence s : sentences)
+			count += s.countWordsLowerWoDiacritics(otherWord);
+		return count;
+	}
+
 	public int countWordsEndsWith(final String suffix) {
 		int count = 0;
 		for (Sentence s : sentences)

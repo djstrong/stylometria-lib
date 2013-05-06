@@ -8,9 +8,10 @@ import agh.stylometria.StringUtils;
 import agh.stylometria.Text;
 
 public class Wulgaryzmy extends Feature {
+	public final static String name = "countWulgaryzmy";
 
 	@Override
-	public Map<String, Double> process(Text t) {
+	public Map<String, Double> process(final Text t) {
 		// wulgaryzmy
 		// http://slowniki.zoni.pl/?s=wulgaryzmy_list
 		// http://www.smf.pl/index.php?topic=9867.0
@@ -313,8 +314,7 @@ public class Wulgaryzmy extends Feature {
 		for (String wulgaryzm : wulgaryzmy) {
 			wulg.add(StringUtils.removeDiacritics(wulgaryzm));
 		}
-		features.put("countWulgaryzmy",
-				(double) t.countWordsLowerWoDiacritics(wulg));
+		features.put(name, (double) t.countWordsLowerWoDiacritics(wulg));
 
 		return features;
 	}

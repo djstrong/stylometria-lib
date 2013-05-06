@@ -11,6 +11,7 @@ import agh.stylometria.features.DlugoscSlow;
 import agh.stylometria.features.Emotikony;
 import agh.stylometria.features.Feature;
 import agh.stylometria.features.FormyGrzecznosciowe;
+import agh.stylometria.features.FunctionWords;
 import agh.stylometria.features.IloscSlowZdan;
 import agh.stylometria.features.Plec;
 import agh.stylometria.features.Pokemony;
@@ -30,23 +31,21 @@ public class FeaturesExtractor {
 		listOfFeatures.add(new ZnakiDiakrytyczne());
 		listOfFeatures.add(new ZnakiInterpunkcyjne());
 		listOfFeatures.add(new IloscSlowZdan());
+		listOfFeatures.add(new FunctionWords());
 	}
 
 	public static Map<String, Double> features(String text) {
 		Map<String, Double> features = new HashMap<String, Double>();
 
 		Text t = new Text(text);
-
+		System.out.println(t);
 		for (Feature f : listOfFeatures) {
 			features.putAll(f.process(t));
 		}
 
+		// TODO: trzeba jeszcze cechy podzielic przez ilosc slow lub zdan
+
 		// ilość poszczególnych znaków (raczej specjalnych)
-
-		// common words, functional words - np. jest, na, w, dla - najlepsze
-		// wyniki
-
-		// truche duzo spojnikow i przyimkow
 
 		return features;
 	}

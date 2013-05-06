@@ -7,11 +7,12 @@ import agh.stylometria.Sentence;
 import agh.stylometria.Text;
 
 public class Pokemony extends Feature {
+	public final static String name = "countPokemony";
 
 	@Override
-	public Map<String, Double> process(Text t) {
+	public Map<String, Double> process(final Text t) {
 		Map<String, Double> features = new HashMap<String, Double>();
-		
+
 		// pokemony - pomijajac pierwsza litere czy slowo ma male i wielkie
 		// litery
 		int count = 0;
@@ -30,8 +31,8 @@ public class Pokemony extends Feature {
 					++count;
 			}
 		}
-		features.put("countPokemony", (double) count);
-		
+		features.put(name, (double) count);
+
 		return features;
 	}
 

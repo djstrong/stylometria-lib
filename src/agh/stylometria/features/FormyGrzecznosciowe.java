@@ -9,11 +9,13 @@ import agh.stylometria.StringUtils;
 import agh.stylometria.Text;
 
 public class FormyGrzecznosciowe extends Feature {
+	public final static String nameMala = "countZwrotyGrzecznoscioweMala";
+	public final static String nameWielka = "countZwrotyGrzecznoscioweWielka";
 
 	@Override
-	public Map<String, Double> process(Text t) {
+	public Map<String, Double> process(final Text t) {
 		Map<String, Double> features = new HashMap<String, Double>();
-		
+
 		// pisanie wielką literą form grzecznościowych
 		String[] zwrotyGrzecznosciowe = new String[] { "ty", "ci", "ciebie",
 				"cię", "tobą", "tobie", "wam", "wami", "was", "wy", "twój",
@@ -26,16 +28,15 @@ public class FormyGrzecznosciowe extends Feature {
 				"panowie", "pany", "pani", "pań", "panie", "panią", "paniach",
 				"paniami", "paniom", "państwo", "państw", "państwa",
 				"państwem", "państwu", "państwach", "państwami", "państwom" };
-		features.put("countZwrotyGrzecznoscioweMala", (double) t
+		features.put(nameMala, (double) t
 				.countWordsWoDiacritics(new HashSet<String>(Arrays
 						.asList(zwrotyGrzecznosciowe))));
 
 		HashSet<String> zw = new HashSet<String>(zwrotyGrzecznosciowe.length);
 		for (String zwrot : zwrotyGrzecznosciowe)
 			zw.add(StringUtils.capitalize(zwrot));
-		features.put("countZwrotyGrzecznoscioweWielka",
-				(double) t.countWordsWoDiacritics(zw));
-		
+		features.put(nameWielka, (double) t.countWordsWoDiacritics(zw));
+
 		return features;
 	}
 
