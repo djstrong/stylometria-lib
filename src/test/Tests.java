@@ -14,6 +14,7 @@ import agh.stylometria.FeaturesExtractor;
 import agh.stylometria.features.DlugoscSlow;
 import agh.stylometria.features.Emotikony;
 import agh.stylometria.features.FormyGrzecznosciowe;
+import agh.stylometria.features.FunctionWords;
 import agh.stylometria.features.IloscSlowZdan;
 import agh.stylometria.features.Plec;
 import agh.stylometria.features.Pokemony;
@@ -103,11 +104,20 @@ public class Tests {
 		Map<String, Double> features = FeaturesExtractor.features(text);
 		assertEquals(Double.valueOf(2), features.get(Pokemony.name));
 	}
-	
+
 	@Test
 	public void testZnakiInterpunkcyjne() {
 		String text = "co ci podać, Panie? ;) :-D co tam słcyhać? tak. PoKemon pOkemon";
 		Map<String, Double> features = FeaturesExtractor.features(text);
 		assertEquals(Double.valueOf(8), features.get(ZnakiInterpunkcyjne.name));
+	}
+
+	@Test
+	public void testFunctionWords() {
+		String text = "co ci podać, Panie? ;) :-D co tam słcyhać? tak. PoKemon pOkemon";
+		Map<String, Double> features = FeaturesExtractor.features(text);
+		assertEquals(Double.valueOf(2), features.get(FunctionWords.name + "co"));
+		assertEquals(Double.valueOf(0),
+				features.get(FunctionWords.name + "kiedy"));
 	}
 }
