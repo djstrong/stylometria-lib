@@ -27,7 +27,9 @@ public class StringUtils {
 
 		String[][] zamiany = { { "ą", "a" }, { "ć", "c" }, { "ę", "e" },
 				{ "ł", "l" }, { "ń", "n" }, { "ó", "o" }, { "ś", "s" },
-				{ "ź", "z" }, { "ż", "z" } };
+				{ "ź", "z" }, { "ż", "z" }, { "Ą", "A" }, { "Ć", "C" },
+				{ "Ę", "E" }, { "Ł", "L" }, { "Ń", "N" }, { "Ó", "O" },
+				{ "Ś", "S" }, { "Ź", "Z" }, { "Ż", "Z" } };
 		for (String[] zamiana : zamiany) {
 			sb = replace(sb, zamiana[0], zamiana[1], -1);
 			sb = replace(sb, zamiana[0].toUpperCase(),
