@@ -42,7 +42,7 @@ public class FeaturesExtractor {
 		Map<String, Double> features = new HashMap<String, Double>();
 
 		Text t = new Text(text);
-		//System.out.println(t);
+		// System.out.println(t);
 		for (Feature f : listOfFeatures) {
 			features.putAll(f.process(t));
 		}
@@ -73,47 +73,56 @@ public class FeaturesExtractor {
 	}
 
 	public static void main(String[] args) throws Exception {
-		CSVReader reader = new CSVReader(new FileReader("test_comments.csv"));
-	    String []nextLine;
-	    List<String> header = new LinkedList();
-	    CSVWriter writer = new CSVWriter(new FileWriter("test.csv"), ',', CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.NO_ESCAPE_CHARACTER);
-	    //ICsvMapWriter writer = new CsvMapWriter(new FileWriter("test.csv"),CsvPreference.STANDARD_PREFERENCE);
-	    List<Map> featuresMaps  = new ArrayList();
-	    List authors = new ArrayList();
-	    while ((nextLine = reader.readNext()) != null) {
-	    	Map f = features(nextLine[1].toString());
-	    	authors.add(nextLine[0].toString());
-	    	featuresMaps.add(f);
-	    }
-	    
-	    //header
-	    int max = 0;
-	    Map headerMap = null;
-	    for(Map m : featuresMaps){
-	    	if(m.keySet().size()>max){
-	    		max = m.keySet().size();
-	    		headerMap = m;
-	    	}
-	    }
-	    
-    	for (Object k : headerMap.keySet()) {
-		    		header.add(k.toString());
-		}
-    	header.add("author");
-	    writer.writeNext(header.toArray(new String[0]));
+		CSVReader reader = new CSVReader(new FileReader("comments.csv"));
+		String[] nextLine;
+		List<String> header = new LinkedList<String>();
 
-	    for(int i=0;i<featuresMaps.size();i++){
-	    	Map<String,Double> m = featuresMaps.get(i);
-	    	List<String> entries = new LinkedList();
-	    	
-	    	for(String key : header){
-	    		Object val = m.get(key)==null ? 0.0 : m.get(key);
-	    		entries.add(val.toString());
-	    	}
-	    	entries.add(authors.get(i).toString());
-	        writer.writeNext(entries.toArray(new String[0]));
-	        
-	    }
-	    writer.close();
+		// ICsvMapWriter writer = new CsvMapWriter(new
+		// FileWriter("test.csv"),CsvPreference.STANDARD_PREFERENCE);
+		List<Map<String, Double>> featuresMaps = new ArrayList<Map<String, Double>>();
+		List<String> authors = new ArrayList<String>();
+		int c = 0;
+		while ((nextLine = reader.readNext()) != null) {
+			Map<String, Double> f = features(nextLine[1].toString());
+			authors.add(nextLine[0].toString());
+			featuresMaps.add(f);
+			++c;
+			if (c % 100 == 0)
+				System.out.println(c);
+		}
+
+		// header
+		int max = 0;
+		Map<String, Double> headerMap = null;
+		for (Map<String, Double> m : featuresMaps) {
+			if (m.keySet().size() > max) {
+				max = m.keySet().size();
+				headerMap = m;
+			}
+		}
+
+		for (Object k : headerMap.keySet()) {
+			header.add(k.toString());
+		}
+		header.add("author");
+
+		CSVWriter writer = new CSVWriter(new FileWriter("test.csv"), ',',
+				CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.NO_ESCAPE_CHARACTER);
+		writer.writeNext(header.toArray(new String[0]));
+		header.remove("author");
+		
+		for (int i = 0; i < featuresMaps.size(); i++) {
+			Map<String, Double> m = featuresMaps.get(i);
+			List<String> entries = new LinkedList<String>();
+
+			for (String key : header) {
+				Object val = m.get(key) == null ? 0.0 : m.get(key);
+				entries.add(val.toString());
+			}
+			entries.add(authors.get(i).toString());
+			writer.writeNext(entries.toArray(new String[0]));
+
+		}
+		writer.close();
 	}
 }

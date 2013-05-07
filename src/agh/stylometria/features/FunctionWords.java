@@ -48,11 +48,11 @@ public class FunctionWords extends Feature {
 				"k", "wskroś", "naprzeciwko", "za", "wkoło", "co", "śród",
 				"via", "o", "pobocz", "ponad", "nieopodal", "powyżej", "skróś",
 				"przed", "dookoła", "przeciwko", "loco", "podal", "w", "na",
-				"(vis-à-vis", "vis-à-vis", "naprzeciw", "pod", "podle", "temu",
-				"mimo", "znad", "przez", "bez", "skrony", "przeciw", "ponad",
-				"dla", "obok", "lada", "około", "jak", "niżeli", "per",
-				"pobok", "podług", "nad", "wyjąwszy", "gwoli", "wobec",
-				"contra", "niż", "zza", "miast", "prócz" };
+				"vis-à-vis", "naprzeciw", "pod", "podle", "temu", "mimo",
+				"znad", "przez", "bez", "skrony", "przeciw", "ponad", "dla",
+				"obok", "lada", "około", "jak", "niżeli", "per", "pobok",
+				"podług", "nad", "wyjąwszy", "gwoli", "wobec", "contra", "niż",
+				"zza", "miast", "prócz" };
 
 		for (String functionWord : spojnikiZaimki) {
 			functionWord = StringUtils.removeDiacritics(functionWord);

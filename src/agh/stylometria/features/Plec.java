@@ -6,8 +6,8 @@ import java.util.Map;
 import agh.stylometria.Text;
 
 public class Plec extends Feature {
-	public final static String nameLeem = "countL'em";
-	public final static String nameLaam = "countL'am";
+	public final static String nameLeem = "countLeem";
+	public final static String nameLaam = "countLaam";
 	public final static String nameLem = "countLem";
 	public final static String nameLam = "countLam";
 
