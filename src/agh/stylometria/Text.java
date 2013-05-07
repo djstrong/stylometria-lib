@@ -100,9 +100,8 @@ public class Text {
 	}
 
 	// words iterator
-	public static void main(String[] args) {
-		Text t = new Text(
-				"kiedy kierowca samochodu stracił panowanie? :) I Ci ludzie ciągle piją do wszystkich, że nie chcą ich przepuszczać na skrzyżowaniach, że kierowcy samochodów nie chcą wjeżdżać na chodniki, aby przepuścić przepychającego się w korku motocykla? CO ZA HIPOKRYZJA!");
+	public static void main(String[] args) throws Exception {
+		Text t = new Text("aaaa");
 		System.out.println(t);
 	}
 }

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import agh.stylometria.features.DlugoscSlow;
 import agh.stylometria.features.Emotikony;
@@ -46,11 +47,29 @@ public class FeaturesExtractor {
 			features.putAll(f.process(t));
 		}
 
-		// TODO: trzeba jeszcze cechy podzielic przez ilosc slow lub zdan
+		Map<String, Double> new_features = new HashMap<String, Double>();
+
+		double value;
+		for (Entry<String, Double> entry : features.entrySet()) {
+			new_features.put(entry.getKey(), entry.getValue());
+
+			value = features.get(IloscSlowZdan.nameWords);
+			if (value == 0.0)
+				value = 1.0;
+			new_features.put(
+					entry.getKey() + "PRZEZ" + IloscSlowZdan.nameWords,
+					entry.getValue() / value);
+
+			value = features.get(IloscSlowZdan.nameSentences);
+			if (value == 0.0)
+				value = 1.0;
+			new_features.put(entry.getKey() + "PRZEZ"
+					+ IloscSlowZdan.nameSentences, entry.getValue() / value);
+		}
 
 		// ilość poszczególnych znaków (raczej specjalnych)
 
-		return features;
+		return new_features;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -96,7 +115,5 @@ public class FeaturesExtractor {
 	        
 	    }
 	    writer.close();
-	    
-		
 	}
 }
