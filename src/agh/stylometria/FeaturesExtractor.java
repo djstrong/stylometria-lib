@@ -1,5 +1,6 @@
 package agh.stylometria;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class FeaturesExtractor {
 	private static List<Feature> listOfFeatures = new ArrayList<Feature>();
 	static {
-		listOfFeatures.add(new DlugoscSlow());
+		//listOfFeatures.add(new DlugoscSlow());
 		listOfFeatures.add(new Emotikony());
 		listOfFeatures.add(new FormyGrzecznosciowe());
 		listOfFeatures.add(new Plec());
@@ -35,7 +36,7 @@ public class FeaturesExtractor {
 		listOfFeatures.add(new ZnakiDiakrytyczne());
 		listOfFeatures.add(new ZnakiInterpunkcyjne());
 		listOfFeatures.add(new IloscSlowZdan());
-		listOfFeatures.add(new FunctionWords());
+		//listOfFeatures.add(new FunctionWords());
 	}
 
 	public static Map<String, Double> features(String text) {
@@ -51,7 +52,7 @@ public class FeaturesExtractor {
 
 		double value;
 		for (Entry<String, Double> entry : features.entrySet()) {
-			new_features.put(entry.getKey(), entry.getValue());
+			//new_features.put(entry.getKey(), entry.getValue());
 
 			value = features.get(IloscSlowZdan.nameWords);
 			if (value == 0.0)
@@ -59,12 +60,13 @@ public class FeaturesExtractor {
 			new_features.put(
 					entry.getKey() + "PRZEZ" + IloscSlowZdan.nameWords,
 					entry.getValue() / value);
-
+/*
 			value = features.get(IloscSlowZdan.nameSentences);
 			if (value == 0.0)
 				value = 1.0;
 			new_features.put(entry.getKey() + "PRZEZ"
 					+ IloscSlowZdan.nameSentences, entry.getValue() / value);
+*/
 		}
 
 		// ilość poszczególnych znaków (raczej specjalnych)
@@ -72,8 +74,8 @@ public class FeaturesExtractor {
 		return new_features;
 	}
 
-	public static void main(String[] args) throws Exception {
-		CSVReader reader = new CSVReader(new FileReader("comments.csv"));
+	public static void process(String in, String out) throws Exception {
+		CSVReader reader = new CSVReader(new FileReader(in));
 		String[] nextLine;
 		List<String> header = new LinkedList<String>();
 
@@ -106,11 +108,11 @@ public class FeaturesExtractor {
 		}
 		header.add("author");
 
-		CSVWriter writer = new CSVWriter(new FileWriter("test.csv"), ',',
+		CSVWriter writer = new CSVWriter(new FileWriter(out), ',',
 				CSVWriter.NO_QUOTE_CHARACTER, CSVWriter.NO_ESCAPE_CHARACTER);
 		writer.writeNext(header.toArray(new String[0]));
 		header.remove("author");
-		
+
 		for (int i = 0; i < featuresMaps.size(); i++) {
 			Map<String, Double> m = featuresMaps.get(i);
 			List<String> entries = new LinkedList<String>();
@@ -124,5 +126,12 @@ public class FeaturesExtractor {
 
 		}
 		writer.close();
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		//process("comments.csv", "test.csv");
+		process("comments_test.csv", "ctest.csv");
+		process("comments_train.csv", "ctrain.csv");
 	}
 }
