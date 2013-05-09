@@ -47,7 +47,7 @@ public class Process implements Runnable {
 							+ eval.pctCorrect());
 					out.write(numTexts + "\t" + numAuthors + "\t"
 							+ eval.pctCorrect() + "\n");
-
+					out.flush();
 					results[numTexts][numAuthors] = eval.pctCorrect();
 				}
 			}
