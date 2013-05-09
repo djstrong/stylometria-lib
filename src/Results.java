@@ -92,7 +92,7 @@ public class Results {
 		int minTexts = 2;
 		int maxTexts = 100;
 		int minAuthors = 2;
-		int maxAuthors = 500;
+		int maxAuthors = 100;
 		double[][] results = new double[maxTexts + 1][maxAuthors + 1];
 		for (int numTexts = minTexts; numTexts <= maxTexts; ++numTexts) {
 			for (int numAuthors = minAuthors; numAuthors <= maxAuthors; ++numAuthors) {
@@ -133,8 +133,17 @@ public class Results {
 		classifiers.add(new LibSVM());
 		classifiers.add(new BayesNet());
 
-		for (Classifier classifier : classifiers)
-			process(r, classifier);
+		List<Thread> threads = new ArrayList<Thread>();
+		for (Classifier classifier : classifiers) {
+			Thread t = new Thread(new Process(r, classifier));
+			threads.add(t);
+			t.start();
+			// process(r, classifier);
+		}
+
+		for (Thread t : threads) {
+			t.join();
+		}
 
 	}
 }
