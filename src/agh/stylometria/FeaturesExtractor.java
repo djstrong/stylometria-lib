@@ -27,7 +27,7 @@ import au.com.bytecode.opencsv.CSVWriter;
 public class FeaturesExtractor {
 	private static List<Feature> listOfFeatures = new ArrayList<Feature>();
 	static {
-		//listOfFeatures.add(new DlugoscSlow());
+		// listOfFeatures.add(new DlugoscSlow());
 		listOfFeatures.add(new Emotikony());
 		listOfFeatures.add(new FormyGrzecznosciowe());
 		listOfFeatures.add(new Plec());
@@ -36,7 +36,7 @@ public class FeaturesExtractor {
 		listOfFeatures.add(new ZnakiDiakrytyczne());
 		listOfFeatures.add(new ZnakiInterpunkcyjne());
 		listOfFeatures.add(new IloscSlowZdan());
-		//listOfFeatures.add(new FunctionWords());
+		// listOfFeatures.add(new FunctionWords());
 	}
 
 	public static Map<String, Double> features(String text) {
@@ -52,7 +52,7 @@ public class FeaturesExtractor {
 
 		double value;
 		for (Entry<String, Double> entry : features.entrySet()) {
-			//new_features.put(entry.getKey(), entry.getValue());
+			// new_features.put(entry.getKey(), entry.getValue());
 
 			value = features.get(IloscSlowZdan.nameWords);
 			if (value == 0.0)
@@ -60,13 +60,11 @@ public class FeaturesExtractor {
 			new_features.put(
 					entry.getKey() + "PRZEZ" + IloscSlowZdan.nameWords,
 					entry.getValue() / value);
-/*
-			value = features.get(IloscSlowZdan.nameSentences);
-			if (value == 0.0)
-				value = 1.0;
-			new_features.put(entry.getKey() + "PRZEZ"
-					+ IloscSlowZdan.nameSentences, entry.getValue() / value);
-*/
+			/*
+			 * value = features.get(IloscSlowZdan.nameSentences); if (value ==
+			 * 0.0) value = 1.0; new_features.put(entry.getKey() + "PRZEZ" +
+			 * IloscSlowZdan.nameSentences, entry.getValue() / value);
+			 */
 		}
 
 		// ilość poszczególnych znaków (raczej specjalnych)
@@ -89,8 +87,19 @@ public class FeaturesExtractor {
 			authors.add(nextLine[0].toString());
 			featuresMaps.add(f);
 			++c;
-			if (c % 100 == 0)
+
+			if (nextLine.length > 2) {
 				System.out.println(c);
+				System.out.println(nextLine[0].toString());
+				System.out.println(nextLine[1].toString());
+				System.out.println(nextLine[2].toString());
+				System.out.println();
+			}
+
+			if (c % 100 == 0) {
+				System.out.println(c);
+
+			}
 		}
 
 		// header
@@ -130,8 +139,8 @@ public class FeaturesExtractor {
 	}
 
 	public static void main(String[] args) throws Exception {
-		//process("comments.csv", "test.csv");
-		process("comments_test.csv", "ctest.csv");
-		process("comments_train.csv", "ctrain.csv");
+		process("comments_1000.csv", "f1.csv");
+		// process("comments_test.csv", "ctest.csv");
+		// process("comments_train.csv", "ctrain.csv");
 	}
 }
