@@ -1,0 +1,16 @@
+set terminal pngcairo size 800,600 enhanced
+
+set xlabel "ilosc autorow"
+set ylabel "ilosc tekstow per autor"
+
+set output 'f1J48.png'
+plot 'f1J48.dat' u 2:1:3 w image
+
+set output 'f1NaiveBayes.png'
+plot 'f1NaiveBayes.dat' u 2:1:3 w image
+
+set output 'f1BayesNet.png'
+plot 'f1BayesNet.dat' u 2:1:3 w image
+
+set output 'f1LibSVM.png'
+plot 'f1LibSVM.dat' u 2:1:3 w image
