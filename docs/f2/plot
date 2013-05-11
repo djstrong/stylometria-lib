@@ -1,0 +1,16 @@
+set terminal pngcairo size 800,600 enhanced
+
+set xlabel "ilość autorów"
+set ylabel "ilość tekstów per autor"
+
+set output 'f2J48.png'
+plot 'f1J48.dat' u 2:1:3 w image
+
+set output 'f2NaiveBayes.png'
+plot 'f1NaiveBayes.dat' u 2:1:3 w image
+
+set output 'f2BayesNet.png'
+plot 'f1BayesNet.dat' u 2:1:3 w image
+
+set output 'f2LibSVM.png'
+plot 'f1LibSVM.dat' u 2:1:3 w image

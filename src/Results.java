@@ -24,7 +24,7 @@ public class Results {
 	private Instances data;
 
 	public void buildStructure() throws Exception {
-		DataSource dataSource = new DataSource("f1.csv");
+		DataSource dataSource = new DataSource("f2.csv");
 		data = dataSource.getDataSet();
 		if (data.classIndex() == -1)
 			data.setClassIndex(data.numAttributes() - 1);
@@ -83,54 +83,16 @@ public class Results {
 		return new Data(train, test);
 	}
 
-	public static void process(Results r, Classifier classifier)
-			throws Exception {
-
-		BufferedWriter out = new BufferedWriter(new FileWriter("f1"
-				+ classifier.getClass().getSimpleName() + ".dat"));
-
-		int minTexts = 2;
-		int maxTexts = 100;
-		int minAuthors = 2;
-		int maxAuthors = 100;
-		double[][] results = new double[maxTexts + 1][maxAuthors + 1];
-		for (int numTexts = minTexts; numTexts <= maxTexts; ++numTexts) {
-			for (int numAuthors = minAuthors; numAuthors <= maxAuthors; ++numAuthors) {
-
-				// classifier = new LibSVM();
-				// classifier = new SMO();
-
-				// classifier = new NaiveBayes();
-
-				Data data = r.buildData(numAuthors, numTexts);
-				// System.out.println(data.train);
-				// System.out.println(data.test);
-
-				classifier.buildClassifier(data.train);
-
-				Evaluation eval = new Evaluation(data.train);
-				eval.evaluateModel(classifier, data.test);
-				// System.out.println(eval.toSummaryString("\nResults "+
-				// numAuthors + "\n======\n", false));
-				System.out.println(numTexts + "\t" + numAuthors + "\t"
-						+ eval.pctCorrect());
-				out.write(numTexts + "\t" + numAuthors + "\t"
-						+ eval.pctCorrect() + "\n");
-
-				results[numTexts][numAuthors] = eval.pctCorrect();
-			}
-		}
-		out.close();
-	}
+	
 
 	public static void main(String[] args) throws Exception {
 		Results r = new Results();
 		r.buildStructure();
 
 		List<Classifier> classifiers = new ArrayList<Classifier>();
-		classifiers.add(new J48());
+		//classifiers.add(new J48());
 		classifiers.add(new NaiveBayes());
-		classifiers.add(new LibSVM());
+		//classifiers.add(new LibSVM());
 		classifiers.add(new BayesNet());
 
 		List<Thread> threads = new ArrayList<Thread>();

@@ -1,7 +1,7 @@
 set terminal pngcairo size 800,600 enhanced
 
-set xlabel "ilosc autorow"
-set ylabel "ilosc tekstow per autor"
+set xlabel "ilość autorów"
+set ylabel "ilość tekstów per autor"
 
 set output 'f1J48.png'
 plot 'f1J48.dat' u 2:1:3 w image
