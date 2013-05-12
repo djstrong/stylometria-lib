@@ -39,7 +39,8 @@ public class Process implements Runnable {
 				in.close();
 
 				String[] line = strLine.split("\t");
-				numTexts = Integer.parseInt(line[0])+1;
+				System.out.println("eee"+strLine);
+				numTexts = Integer.parseInt(line[0]);
 				numAuthors = Integer.parseInt(line[1])+1;
 			} catch (FileNotFoundException e) {
 				numTexts = minTexts;
@@ -52,7 +53,7 @@ public class Process implements Runnable {
 
 
 			double[][] results = new double[maxTexts + 1][maxAuthors + 1];
-			for (numTexts = minTexts; numTexts <= maxTexts; ++numTexts) {
+			for (; numTexts <= maxTexts; ++numTexts) {
 				for (; numAuthors <= maxAuthors; ++numAuthors) {
 
 					// classifier = new LibSVM();
