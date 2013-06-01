@@ -1,0 +1,22 @@
+set terminal pngcairo size 800,600 enhanced
+
+set xlabel "miejsce w klasyfikacji"
+set ylabel "dystrybuanta"
+
+set yrange [0:1]
+
+set output 'f110x10.png'
+set title '10 autorow, 10 tekstow'
+plot 'f1BayesNetAUTHOR10TEXT10.dat' w lp t 'BayesNet', 'f1J48AUTHOR10TEXT10.dat' w lp t 'J48', 'f1LibSVMAUTHOR10TEXT10.dat' w lp t 'LibSVM', 'f1NaiveBayesAUTHOR10TEXT10.dat' w lp t 'NaiveBayes'
+
+set output 'f110x100.png'
+set title '10 autorow, 100 tekstow'
+plot 'f1BayesNetAUTHOR10TEXT100.dat' w lp t 'BayesNet', 'f1J48AUTHOR10TEXT100.dat' w lp t 'J48', 'f1LibSVMAUTHOR10TEXT100.dat' w lp t 'LibSVM', 'f1NaiveBayesAUTHOR10TEXT100.dat' w lp t 'NaiveBayes'
+
+set output 'f1100x10.png'
+set title '100 autorow, 10 tekstow'
+plot 'f1BayesNetAUTHOR100TEXT10.dat' w lp t 'BayesNet', 'f1J48AUTHOR100TEXT10.dat' w lp t 'J48', 'f1LibSVMAUTHOR100TEXT10.dat' w lp t 'LibSVM', 'f1NaiveBayesAUTHOR100TEXT10.dat' w lp t 'NaiveBayes'
+
+set output 'f1100x100.png'
+set title '100 autorow, 100 tekstow'
+plot 'f1BayesNetAUTHOR100TEXT100.dat' w lp t 'BayesNet', 'f1J48AUTHOR100TEXT100.dat' w lp t 'J48', 'f1LibSVMAUTHOR100TEXT100.dat' w lp t 'LibSVM', 'f1NaiveBayesAUTHOR100TEXT100.dat' w lp t 'NaiveBayes'

@@ -23,14 +23,17 @@ public class Results {
 	private Map<Integer, List<Instance>> map;
 	private Instances data;
 
-	public void buildStructure() throws Exception {
-		DataSource dataSource = new DataSource("f2.csv");
+	public void buildStructure(String path) throws Exception {
+		DataSource dataSource = new DataSource(path);
 		data = dataSource.getDataSet();
 		if (data.classIndex() == -1)
 			data.setClassIndex(data.numAttributes() - 1);
 
 		this.map = new HashMap<Integer, List<Instance>>();
 		for (int i = 0; i < data.numInstances(); ++i) {
+			// if (i % 10 == 0)
+			//System.out.println(i);
+
 			Instance instance = data.instance(i);
 			Integer cls = (int) instance.classValue();
 			// System.out.println(data.classAttribute().value(cls));
@@ -40,12 +43,13 @@ public class Results {
 				this.map.put(cls, list);
 			}
 			list.add(instance);
-		}
 
-		for (Entry<Integer, List<Instance>> e : map.entrySet()) {
-			System.out.println(e.getKey() + " " + e.getValue().size() + " "
-					+ data.classAttribute().value(e.getKey()));
 		}
+		/*
+		 * for (Entry<Integer, List<Instance>> e : map.entrySet()) {
+		 * System.out.println(e.getKey() + " " + e.getValue().size() + " " +
+		 * data.classAttribute().value(e.getKey())); }
+		 */
 	}
 
 	public Data buildData(int numAuthors, int numTexts) {
@@ -83,16 +87,14 @@ public class Results {
 		return new Data(train, test);
 	}
 
-	
-
 	public static void main(String[] args) throws Exception {
 		Results r = new Results();
-		r.buildStructure();
+		r.buildStructure("f2.csv");
 
 		List<Classifier> classifiers = new ArrayList<Classifier>();
-		//classifiers.add(new J48());
+		// classifiers.add(new J48());
 		classifiers.add(new NaiveBayes());
-		//classifiers.add(new LibSVM());
+		// classifiers.add(new LibSVM());
 		classifiers.add(new BayesNet());
 
 		List<Thread> threads = new ArrayList<Thread>();
