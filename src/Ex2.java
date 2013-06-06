@@ -6,6 +6,7 @@ import java.util.List;
 import weka.classifiers.Classifier;
 import weka.classifiers.bayes.BayesNet;
 import weka.classifiers.bayes.NaiveBayes;
+import weka.classifiers.bayes.net.search.local.K2;
 import weka.classifiers.functions.LibSVM;
 import weka.classifiers.trees.J48;
 import weka.core.Instance;
@@ -35,18 +36,28 @@ public class Ex2 {
 
 	public static void main(String[] args) throws Exception {
 		List<Classifier> classifiers = new ArrayList<Classifier>();
-		classifiers.add(new J48());
-		classifiers.add(new NaiveBayes());
+		//classifiers.add(new J48());
+		//classifiers.add(new NaiveBayes());
 		LibSVM svm = new LibSVM();
 		svm.setOptions(new String[] { "-B" });
-		classifiers.add(svm);
+		//classifiers.add(svm);
+		BayesNet bayesnet = new BayesNet();
+		
+		for (String s: bayesnet.getSearchAlgorithm().getOptions())
+			System.out.println(s);
+		K2 k2 = new K2();
+		k2.setMaxNrOfParents(10);
+		bayesnet.setSearchAlgorithm(k2);
+		for (String s: bayesnet.getSearchAlgorithm().getOptions())
+			System.out.println(s);
+		classifiers.add(bayesnet);
 		classifiers.add(new BayesNet());
 
 		Results r = new Results();
 		r.buildStructure("f1.csv");
 
-		int numAuthors = 10;
-		int numTexts = 10;
+		int numAuthors = 100;
+		int numTexts = 100;
 		Data data = r.buildData(numAuthors, numTexts);
 
 		for (Classifier classifier : classifiers) {
